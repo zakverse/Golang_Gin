@@ -1,0 +1,130 @@
+CREATE TABLE `User` (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    Join_date DATETIME NOT NULL,
+    birth_date DATETIME NULL,
+    referal_code VARCHAR(50) NULL
+);
+
+
+CREATE TABLE `Point` (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    userid INT NOT NULL,
+    total_point INT NOT NULL DEFAULT 0,
+    expired DATETIME NULL,
+
+    CONSTRAINT fk_point_user
+        FOREIGN KEY (user_id) REFERENCES `User`(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+CREATE TABLE `type` (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    code_type INT NOT NULL UNIQUE,
+    description VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE `barang` (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    code_barang VARCHAR(100) NOT NULL UNIQUE,
+    nama_barang VARCHAR(255) NOT NULL,
+    code_type_barang INT NOT NULL,
+    harga_sewa DECIMAL(18,2) NOT NULL,
+    isActive TINYINT(1) NOT NULL DEFAULT 1,
+
+    CONSTRAINT fk_barang_type
+        FOREIGN KEY (code_type_barang) REFERENCES `type`(id)
+        ON UPDATE CASCADE
+        ON DELETE RESTRICT
+);
+
+CREATE TABLE `sewa` (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_user INT NOT NULL,
+    code_struk VARCHAR(50) NOT NULL UNIQUE,
+    tanggal_peminjaman DATETIME NOT NULL,
+    tanggal_jatuh_tempo DATETIME NOT NULL,
+    tanggal_pengembalian DATETIME NULL,
+    point_reward INT NOT NULL DEFAULT 0,
+    denda_keterlambatan DECIMAL(18,2) NOT NULL DEFAULT 0,
+
+    CONSTRAINT fk_sewa_user
+        FOREIGN KEY (id_user) REFERENCES `User`(id)
+        ON UPDATE CASCADE
+        ON DELETE RESTRICT
+);
+
+CREATE TABLE `detail_sewa` (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_sewa INT NOT NULL,
+    code_barang VARCHAR(100) NOT NULL,
+    harga_sewa_barang DECIMAL(18,2) NOT NULL,
+    frekuensi_barang INT NOT NULL DEFAULT 1,
+
+    CONSTRAINT fk_detail_sewa_header
+        FOREIGN KEY (id_sewa) REFERENCES sewa(id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_detail_sewa_barang
+        FOREIGN KEY (code_barang) REFERENCES barang(code_barang)
+        ON UPDATE CASCADE
+        ON DELETE RESTRICT
+);
+
+
+
+
+
+
+
+
+
+
+INSERT INTO `type` (code_type, description)
+VALUES
+(1, 'Televisi'),
+(2, 'Komputer'),
+(3, 'Peralatan Game'),
+(4, 'Camera'),
+(5, 'Kipas Angin'),
+(6, 'Setrika'),
+(7, 'Rice Cooker');
+
+INSERT INTO barang (code_barang, nama_barang, code_type_barang, harga_sewa, isActive) VALUES
+-- Type 1: Televisi
+('TV001', 'Televisi LED 32 Inch', 1, 50000, 1),
+('TV002', 'Televisi LED 43 Inch', 1, 70000, 1),
+('TV003', 'Televisi Smart TV 55 Inch', 1, 120000, 1),
+
+-- Type 2: Komputer
+('PC001', 'PC Office Core i3', 2, 80000, 1),
+('PC002', 'PC Gaming RTX 3060', 2, 150000, 1),
+('PC003', 'PC Editing Core i7', 2, 130000, 1),
+
+-- Type 3: Peralatan Game
+('GM001', 'PlayStation 4', 3, 90000, 1),
+('GM002', 'PlayStation 5', 3, 150000, 1),
+('GM003', 'Nintendo Switch', 3, 80000, 1),
+
+-- Type 4: Camera
+('CM001', 'Kamera DSLR Canon', 4, 100000, 1),
+('CM002', 'Kamera Mirrorless Sony', 4, 130000, 1),
+('CM003', 'Action Cam GoPro', 4, 60000, 1),
+
+-- Type 5: Kipas Angin
+('KP001', 'Kipas Angin Berdiri', 5, 20000, 1),
+('KP002', 'Kipas Angin Dinding', 5, 15000, 1),
+('KP003', 'Kipas Angin Meja', 5, 10000, 1),
+
+-- Type 6: Setrika
+('ST001', 'Setrika Listrik Standard', 6, 10000, 1),
+('ST002', 'Setrika Uap Portable', 6, 15000, 1),
+('ST003', 'Setrika Uap Besar', 6, 20000, 1),
+
+-- Type 7: Rice Cooker
+('RC001', 'Rice Cooker Mini 0.6L', 7, 15000, 1),
+('RC002', 'Rice Cooker 1.8L', 7, 20000, 1),
+('RC003', 'Rice Cooker Digital 2L', 7, 30000, 1);
