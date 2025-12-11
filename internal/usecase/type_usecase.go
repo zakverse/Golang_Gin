@@ -35,4 +35,5 @@ func (u *TypeUseCase) Delete(id uint) error {
 	return u.repo.Delete(id)
 }
 
+
 //=================================================================

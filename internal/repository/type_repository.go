@@ -37,7 +37,11 @@ func (r *typeRepository) GetAll() ([]domain.Type, error) {
 }
 
 func (r *typeRepository) GetByID(id uint) (domain.Type, error) {
-	rows, err := r.db.Query("select code_type, description from type where id = ?", id)
+
+	query := "select id ,code_type, description from type where id = ? "
+	
+	rows, err := r.db.Query(query, id)
+
 	if err != nil {
 		return domain.Type{}, err
 	}
@@ -45,7 +49,7 @@ func (r *typeRepository) GetByID(id uint) (domain.Type, error) {
 
 	typ := domain.Type{}
 	for rows.Next() {
-		err := rows.Scan(&typ.CodeType, &typ.Description)
+		err := rows.Scan(&typ.ID, &typ.CodeType, &typ.Description)
 		if err != nil {
 			return domain.Type{}, err
 		}

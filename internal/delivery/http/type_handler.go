@@ -19,7 +19,7 @@ func NewTypeHandler(r *gin.Engine, uc *usecase.TypeUseCase) {
 	typeroot := r.Group("/types")
 	{
 		typeroot.GET("/all", handler.GetAllType)
-		typeroot.GET("/:id", handler.GetByIDType)
+		typeroot.GET("/:zaki/:abang", handler.GetByIDType)
 		typeroot.POST("/create", handler.CreateType)
 		typeroot.PUT("/:id", handler.UpdateType)
 		typeroot.DELETE("/:id", handler.DeleteType)
@@ -38,7 +38,10 @@ func (h *TypeHandler) GetAllType(c *gin.Context) {
 }
 
 func (h *TypeHandler) GetByIDType(c *gin.Context) {
-	idStr := c.Param("id")
+	idStr := c.Param("zaki")
+	abangstr := c.Param("abang")
+	queryNgasal := c.Query("ngasalQuery")
+	queryNgasal2 := c.Query("ngasalBanget")
 	id, err := strconv.ParseUint(idStr, 10, 32)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
@@ -51,7 +54,15 @@ func (h *TypeHandler) GetByIDType(c *gin.Context) {
 		})
 		return
 	}
-	c.JSON(http.StatusOK, typ)
+	// c.JSON(http.StatusOK, typ)
+	c.JSON(http.StatusOK, gin.H{
+		"Dzaki" : "Mantap",
+		"Abang" : abangstr,
+		"Id_Atas" : typ.ID,
+		"Data_all" : typ,
+		"NgasalQuery" : queryNgasal,
+		"NgasalBanget" : queryNgasal2,
+	})
 }
 
 func (h *TypeHandler) CreateType(c *gin.Context) {
