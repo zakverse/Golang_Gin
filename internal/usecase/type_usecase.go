@@ -23,5 +23,16 @@ func (u *TypeUseCase) GetByID(id uint) (domain.Type, error){
 	return u.repo.GetByID(id)
 }
 
+func (u *TypeUseCase) Create(typ domain.Type) error {
+	return u.repo.Create(typ)
+}
+
+func (u *TypeUseCase) Update(typ domain.Type) error {
+	return u.repo.Update(typ)
+}
+
+func (u *TypeUseCase) Delete(id uint) error {
+	return u.repo.Delete(id)
+}
 
 //=================================================================

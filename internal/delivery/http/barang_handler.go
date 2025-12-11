@@ -1,8 +1,10 @@
 package http
 
 import (
+	"Golang_Gin/internal/domain"
 	"Golang_Gin/internal/usecase"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -28,4 +30,68 @@ func (h *BarangHandler) GetAllBarang(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, barangs)
+}
+
+func (h *BarangHandler) GetByID(c *gin.Context) {
+	idStr := c.Param("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID format"})
+		return
+	}
+	barang, err := h.uc.GetByID(uint(id))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, barang)
+}
+
+func (h *BarangHandler) Create(c *gin.Context) {
+	var barang domain.Barang
+	if err := c.ShouldBindJSON(&barang); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if err := h.uc.Create(barang); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Barang created successfully"})
+}
+
+func (h *BarangHandler) Update(c *gin.Context) {
+	idStr := c.Param("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID format"})
+		return
+	}
+	var barang domain.Barang
+	if err := c.ShouldBindJSON(&barang); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	barang.ID = id
+	if err := h.uc.Update(barang); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Barang updated successfully"})
+}
+
+func (h *BarangHandler) Delete(c *gin.Context) {
+	idStr := c.Param("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID format"})
+		return
+	}
+	if err := h.uc.Delete(uint(id)); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Barang deleted successfully"})
 }

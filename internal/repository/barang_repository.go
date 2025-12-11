@@ -52,3 +52,27 @@ func (r *barangRepository) GetByID(id uint) (domain.Barang, error) {
 	}
 	return barang, nil
 }
+
+func (r *barangRepository) Create(barang domain.Barang) error {
+	_, err := r.db.Exec("insert into barang (code_barang, nama_barang, code_type_barang, harga_sewa) values (?, ?, ?, ?)", barang.CodeBarang, barang.NamaBarang, barang.CodeTypeBarang, barang.HargaSewa)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *barangRepository) Update(barang domain.Barang) error {
+	_, err := r.db.Exec("update barang set code_barang = ?, nama_barang = ?, code_type_barang = ?, harga_sewa = ? where id = ?", barang.CodeBarang, barang.NamaBarang, barang.CodeTypeBarang, barang.HargaSewa, barang.ID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *barangRepository) Delete(id uint) error {
+	_, err := r.db.Exec("delete from barang where id = ?", id)
+	if err != nil {
+		return err
+	}
+	return nil
+}

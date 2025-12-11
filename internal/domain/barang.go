@@ -15,4 +15,7 @@ type Barang struct {
 type BarangRepository interface {
 	GetAll() ([]Barang, error)
 	GetByID(id uint) (Barang, error)
+	Create(barang Barang) error
+	Update(barang Barang) error
+	Delete(id uint) error
 }
