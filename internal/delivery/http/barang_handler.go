@@ -12,15 +12,17 @@ import (
 type BarangHandler struct {
 	uc *usecase.BarangUseCase
 }
-
 func NewBarangHandler(r *gin.Engine, uc *usecase.BarangUseCase) {
 	handler := &BarangHandler{uc}
 	barangRoot := r.Group("/barang")
 	{
 		barangRoot.GET("/all", handler.GetAllBarang)
+		barangRoot.GET("/:id", handler.GetByID)
+		barangRoot.POST("/create", handler.Create)
+		barangRoot.PUT("/:id", handler.Update)
+		barangRoot.DELETE("/:id", handler.Delete)
 	}
 }
-
 func (h *BarangHandler) GetAllBarang(c *gin.Context) {
 	barangs, err := h.uc.GetAll()
 	if err != nil {
@@ -74,7 +76,7 @@ func (h *BarangHandler) Update(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	barang.ID = id
+	barang.ID = uint(id)
 	if err := h.uc.Update(barang); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

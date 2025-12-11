@@ -24,6 +24,5 @@ func main() {
 	ucBarang := usecase.NewBarangUseCase(repoBarang)
 	http.NewBarangHandler(r, ucBarang)
 
-	
-	r.Run(":8081")
+	r.Run(":8080")
 }

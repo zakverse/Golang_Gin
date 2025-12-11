@@ -19,6 +19,10 @@ func NewTypeHandler(r *gin.Engine, uc *usecase.TypeUseCase) {
 	typeroot := r.Group("/types")
 	{
 		typeroot.GET("/all", handler.GetAllType)
+		typeroot.GET("/:id", handler.GetByIDType)
+		typeroot.POST("/create", handler.CreateType)
+		typeroot.PUT("/:id", handler.UpdateType)
+		typeroot.DELETE("/:id", handler.DeleteType)
 	}
 }
 

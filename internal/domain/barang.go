@@ -1,7 +1,7 @@
 package domain
 
 type Barang struct {
-	ID             int     `json:"id"`
+	ID             uint    `json:"id"`
 	CodeBarang     string  `json:"code_barang" binding:"required"`
 	NamaBarang     string  `json:"nama_barang" binding:"required"`
 	CodeTypeBarang uint    `json:"code_type_barang"` // Foreign Key ke Type
