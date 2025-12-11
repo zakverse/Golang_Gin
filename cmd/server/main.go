@@ -18,7 +18,12 @@ func main() {
 
 	repoTypes := repository.NewTypeRepository(db)
 	ucTypes := usecase.NewTypeUseCase(repoTypes)
-
 	http.NewTypeHandler(r, ucTypes)
+
+	repoBarang := repository.NewBarangRepository(db)
+	ucBarang := usecase.NewBarangUseCase(repoBarang)
+	http.NewBarangHandler(r, ucBarang)
+
+	
 	r.Run(":8081")
 }

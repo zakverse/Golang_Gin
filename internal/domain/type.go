@@ -8,7 +8,7 @@ type Type struct {
 
 type TypeRepository interface {
 	GetAll() ([]Type, error)
-	// GetByID(id uint) (Type, error)
+	GetByID(id uint) (Type, error)
 	// Create(type Type) error
 	// Update(type Type) error
 	// Delete(id uint) error

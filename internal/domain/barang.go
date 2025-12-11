@@ -9,5 +9,10 @@ type Barang struct {
 	IsActive       bool    `json:"is_active"`
 
 	// Relasi
-	Type 		   Type 				`json:"type"`
+	Type Type `json:"type"`
+}
+
+type BarangRepository interface {
+	GetAll() ([]Barang, error)
+	GetByID(id uint) (Barang, error)
 }
