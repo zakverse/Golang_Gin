@@ -68,11 +68,11 @@ func (h *TypeHandler) GetByIDType(c *gin.Context) {
 func (h *TypeHandler) CreateType(c *gin.Context) {
 	var typ domain.Type
 	if err := c.ShouldBindJSON(&typ); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"errorBody": err.Error()})
 		return
 	}
 	if err := h.uc.Create(typ); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"errorAja": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "Type created successfully"})
@@ -81,22 +81,27 @@ func (h *TypeHandler) CreateType(c *gin.Context) {
 func (h *TypeHandler) UpdateType(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
+
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
 		return
 	}
+
 	var typ domain.Type
 	if err := c.ShouldBindJSON(&typ); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
 	typ.ID = uint(id)
 	if err := h.uc.Update(typ); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "Type updated successfully"})
+	
 }
+
 func (h *TypeHandler) DeleteType(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
