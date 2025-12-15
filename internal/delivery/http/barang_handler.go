@@ -73,12 +73,12 @@ func (h *BarangHandler) Update(c *gin.Context) {
 	}
 	var barang domain.Barang
 	if err := c.ShouldBindJSON(&barang); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"errorBagianJson": err.Error()})
 		return
 	}
 	barang.ID = uint(id)
 	if err := h.uc.Update(barang); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"errorBagianUpdate": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "Barang updated successfully"})
@@ -88,11 +88,11 @@ func (h *BarangHandler) Delete(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID format"})
+		c.JSON(http.StatusBadRequest, gin.H{"errorBagianjson": "Invalid ID format"})
 		return
 	}
 	if err := h.uc.Delete(uint(id)); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"errorBagianDelete": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "Barang deleted successfully"})
