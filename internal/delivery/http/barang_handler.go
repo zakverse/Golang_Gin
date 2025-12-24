@@ -12,12 +12,15 @@ import (
 type BarangHandler struct {
 	uc *usecase.BarangUseCase
 }
+
 func NewBarangHandler(r *gin.Engine, uc *usecase.BarangUseCase) {
 	handler := &BarangHandler{uc}
 	barangRoot := r.Group("/barang")
 	{
 		barangRoot.GET("/all", handler.GetAllBarang)
 		barangRoot.GET("/:id", handler.GetByID)
+		barangRoot.GET("/join/:id", handler.GetByIDJoin)
+		barangRoot.GET("/join-detail-harga-sewa", handler.JoinDetailHargaSewa)
 		barangRoot.POST("/create", handler.Create)
 		barangRoot.PUT("/:id", handler.Update)
 		barangRoot.DELETE("/:id", handler.Delete)
@@ -96,4 +99,28 @@ func (h *BarangHandler) Delete(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "Barang deleted successfully"})
+}
+
+func (h *BarangHandler) GetByIDJoin(c *gin.Context) {
+	idStr := c.Param("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID format"})
+		return
+	}
+	barang, err := h.uc.GetByIDJoin(uint(id))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, barang)
+}
+
+func (h* BarangHandler) JoinDetailHargaSewa(c *gin.Context) {
+	barang, err := h.uc.JoinDetailHargaSewa()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, barang)
 }

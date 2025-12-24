@@ -1,1 +1,1 @@
-CRUD for barang
+jwt, hasing, encript, decript

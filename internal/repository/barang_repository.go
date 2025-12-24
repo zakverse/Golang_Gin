@@ -76,3 +76,39 @@ func (r *barangRepository) Delete(id uint) error {
 	}
 	return nil
 }
+
+func (r *barangRepository) GetByIDJoin(id uint) (domain.DetailBarang, error) {
+	rows, err := r.db.Query("Select a.id , code_barang, nama_barang, harga_sewa, description from barang as a join type as b on a.code_type_barang = b.code_type where a.id = ?", id)
+	if err != nil {
+		return domain.DetailBarang{}, err
+	}
+	defer rows.Close()
+
+	barang := domain.DetailBarang{}
+	for rows.Next() {
+		err := rows.Scan(&barang.IDBarang, &barang.CodeBarang, &barang.NamaBarang, &barang.HargaSewa, &barang.TypeDescription)
+		if err != nil {
+			return domain.DetailBarang{}, err
+		}
+	}
+	return barang, nil
+}
+
+func (r *barangRepository) JoinDetailHargaSewa() ([]domain.DetailHargaSewaBarang, error) {
+	rows, err := r.db.Query("select a.id,  a.id_sewa, nama_barang, description, frekuensi_barang ,harga_sewa_barang from detail_sewa as a join barang as c on a.code_barang = c.code_barang join type as b on b.code_type = c.code_type_barang")
+	if err != nil {
+		return []domain.DetailHargaSewaBarang{}, err
+	}
+	defer rows.Close()
+
+	barang := []domain.DetailHargaSewaBarang{}
+	for rows.Next() {
+		single := domain.DetailHargaSewaBarang{}
+		err := rows.Scan(&single.ID_Detail_Sewa, &single.IDSewa, &single.Nama_Barang, &single.Description, &single.FrekuensiBarang, &single.HargaSewaBarang)
+		if err != nil {
+			return nil, err
+		}
+		barang = append(barang, single)
+	}
+	return barang, nil
+}

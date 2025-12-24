@@ -31,3 +31,11 @@ func (u *BarangUseCase) Update(barang domain.Barang) error {
 func (u *BarangUseCase) Delete(id uint) error {
 	return u.repo.Delete(id)
 }	
+
+func (u *BarangUseCase) GetByIDJoin(id uint) (domain.DetailBarang, error) {
+	return u.repo.GetByIDJoin(id)
+}
+
+func (u *BarangUseCase) JoinDetailHargaSewa() ([]domain.DetailHargaSewaBarang, error) {
+	return u.repo.JoinDetailHargaSewa()
+}
