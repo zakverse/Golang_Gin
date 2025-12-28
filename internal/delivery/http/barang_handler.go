@@ -5,7 +5,7 @@ import (
 	"Golang_Gin/internal/usecase"
 	"net/http"
 	"strconv"
-
+	"Golang_Gin/internal/infrastructure"
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,7 +17,7 @@ func NewBarangHandler(r *gin.Engine, uc *usecase.BarangUseCase) {
 	handler := &BarangHandler{uc}
 	barangRoot := r.Group("/barang")
 	{
-		barangRoot.GET("/all", handler.GetAllBarang)
+		barangRoot.GET("/all", infrastructure.JWTAuth(), handler.GetAllBarang)
 		barangRoot.GET("/:id", handler.GetByID)
 		barangRoot.GET("/join/:id", handler.GetByIDJoin)
 		barangRoot.GET("/join-detail-harga-sewa", handler.JoinDetailHargaSewa)

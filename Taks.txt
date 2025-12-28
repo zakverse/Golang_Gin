@@ -1,1 +1,1 @@
-jwt, hasing, encript, decript
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjcwMjcwMjMsInVzZXJfaWQiOjUsInVzZXJuYW1lIjoiZmFycmFzIn0.17vByIrV7XdA0sO1yrtESK4cIcxIVAzovNrAcrsZryw

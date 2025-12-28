@@ -42,5 +42,9 @@ func main() {
 	ucAuth := usecase.NewAuthUseCase(repoAuth)
 	http.NewAuthHandler(r, ucAuth)
 
+	repoLogin := repository.NewLoginRepository(db)
+	ucLogin := usecase.NewLoginUseCase(repoLogin)
+	http.NewLoginHandler(r, ucLogin)
+
 	r.Run(":8080")
 }
