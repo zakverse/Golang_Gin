@@ -46,5 +46,9 @@ func main() {
 	ucLogin := usecase.NewLoginUseCase(repoLogin)
 	http.NewLoginHandler(r, ucLogin)
 
+	repoSewa := repository.NewSewaRepository(db)
+	ucSewa := usecase.NewSewaUseCase(repoSewa)
+	http.NewSewaHandler(r, ucSewa)
+
 	r.Run(":8080")
 }
